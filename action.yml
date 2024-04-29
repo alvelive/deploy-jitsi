@@ -69,16 +69,35 @@ runs:
 
         echo "Retrieving pods..."
 
-        POD_NAMES=$(kubectl get pods --no-headers=true || { echo "Failed to get pods"; exit 1; })
+        POD_NAMES=$(kubectl get pods --no-headers | awk '{print $1}' || -1)
 
-        echo "Pods retrieved: $POD_NAMES"
-        echo "Filtering pods..."
-
-        MATCHING_PODS=$(echo "$POD_NAMES" | grep "jitsi.*-${{ inputs.component }}-" || { echo "No matching pods found"; exit 0; })
-
-        if [ -n "$MATCHING_PODS" ]; then
-          echo "Deleting pods..."
-          echo "$MATCHING_PODS" | awk '{print $1}' | xargs -P 16 -n 1 kubectl delete pod
-        else
-          echo "No matching pods to delete."
+        if [ $POD_NAMES -eq -1 ]; then
+          echo "Failed to retrieve pods."
+          exit 1
         fi
+
+        if [ -z $POD_NAMES ]; then
+          echo "No pods found."
+          exit 0
+        fi
+
+        POD_COUNT="$(echo $POD_NAMES | wc -l)"
+        MATCH="jitsi.*-${{ inputs.component }}-"
+
+        echo "$POD_COUNT pods found"
+        echo 'Matching pods with $MATCH...'
+
+        MATCHING_PODS=$(echo "$POD_NAMES" | grep "$MATCH" || -1)
+
+        if [ $MATCHING_PODS -eq -1 ]; then
+          echo "Failed to match pods with $MATCH"
+          exit 1
+        fi
+
+        if [ -z "$MATCHING_PODS" ]; then
+          echo "No matching pods to delete."
+          exit 0
+        fi
+
+        echo "Deleting pods..."
+        echo "$MATCHING_PODS" | xargs -P 16 -n 1 kubectl delete pod
