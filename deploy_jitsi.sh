@@ -23,7 +23,7 @@ echo "Retrieving pods..."
 
 POD_NAMES=$(kubectl get pods --no-headers | awk '{print $1}')
 
-if [ -z $POD_NAMES ]; then
+if [ -z "$POD_NAMES" ]; then
   echo "No pods found."
   exit 0
 fi
