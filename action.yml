@@ -54,7 +54,7 @@ runs:
     - name: Setup kubeconfig
       shell: bash
       run: |
-        echo "${{ inpus.kube-config }}" > "${{ inputs.kube-config-file }}"
+        echo "${{ inputs.kube-config }}" > "${{ inputs.kube-config-file }}"
         chmod 600 "${{ inputs.kube-config-file }}"
 
     - name: Deploy to Kubernetes
