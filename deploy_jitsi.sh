@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ -z "$KUBECONFIG" ]; then
   echo "KUBECONFIG not set."
   exit 1
@@ -19,12 +21,7 @@ kubectl cluster-info
 
 echo "Retrieving pods..."
 
-POD_NAMES=$(kubectl get pods --no-headers | awk '{print $1}' || -1)
-
-if [ $POD_NAMES -eq -1 ]; then
-  echo "Failed to retrieve pods."
-  exit 1
-fi
+POD_NAMES=$(kubectl get pods --no-headers | awk '{print $1}')
 
 if [ -z $POD_NAMES ]; then
   echo "No pods found."
@@ -37,12 +34,7 @@ MATCH="jitsi.*-$JITSI_COMPONENT-"
 echo "$POD_COUNT pods found"
 echo 'Matching pods with $MATCH...'
 
-MATCHING_PODS=$(echo "$POD_NAMES" | grep "$MATCH" || -1)
-
-if [ $MATCHING_PODS -eq -1 ]; then
-  echo "Failed to match pods with $MATCH"
-  exit 1
-fi
+MATCHING_PODS=$(echo "$POD_NAMES" | grep "$MATCH")
 
 if [ -z "$MATCHING_PODS" ]; then
   echo "No matching pods to delete."
