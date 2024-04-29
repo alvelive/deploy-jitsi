@@ -62,4 +62,4 @@ runs:
         export KUBECONFIG="${{ inputs.kube-config-file }}"
         export JITSI_COMPONENT="${{ inputs.component }}"
 
-        curl -sL https://raw.githubusercontent.com/jitsi/docker-jitsi-meet/master/kubernetes/${JITSI_COMPONENT}.yaml | envsubst | kubectl apply -f -
+        curl -o- {{install_url}} | bash

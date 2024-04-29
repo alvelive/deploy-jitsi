@@ -1,0 +1,35 @@
+name: Update Action
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - action.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update-action:
+    runs-on: ubuntu-latest
+    env:
+      SCRIPT_FILE: 'deploy_jitsi.sh'
+      INPUT_FILE: 'action-template.yml'
+      OUTPUT_FILE: 'action.yml'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Prepare README.md
+        run: |
+          INSTALL_URL="https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/${{ env.SCRIPT_FILE }}.sh"
+          sed "s|{{install_url}}|$INSTALL_URL|g" ${{ env.INPUT_FILE }} > ${{ env.OUTPUT_FILE }}
+
+      - name: Commit and push README.md
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add ${{ env.OUTPUT_FILE }}
+          git commit -m "Update ${{ env.OUTPUT_FILE }} to reflect new release"
+          git push
