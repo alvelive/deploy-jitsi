@@ -28,18 +28,22 @@ if [ -z "$POD_NAMES" ]; then
   exit 0
 fi
 
-POD_COUNT="$(echo $POD_NAMES | wc -l)"
+POD_COUNT="$(echo "$POD_NAMES" | wc -l)"
+
+echo "$POD_COUNT pod(s) found"
+
 MATCH="jitsi.*-$JITSI_COMPONENT-"
 
-echo "$POD_COUNT pods found"
-echo 'Matching pods with $MATCH...'
+echo "Matching pod(s) with $MATCH..."
 
 MATCHING_PODS=$(echo "$POD_NAMES" | grep "$MATCH")
 
 if [ -z "$MATCHING_PODS" ]; then
-  echo "No matching pods to delete."
+  echo "No matching pod(s) to delete."
   exit 0
 fi
 
-echo "Deleting pods..."
+MATCHING_COUNT="$(echo "$MATCHING_PODS" | wc -l)"
+
+echo "Deleting $MATCHING_COUNT pod(s)"
 echo "$MATCHING_PODS" | xargs -P 16 -n 1 kubectl delete pod
