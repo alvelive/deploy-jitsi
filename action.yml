@@ -62,4 +62,4 @@ runs:
         export KUBECONFIG="${{ inputs.kube-config-file }}"
         export JITSI_COMPONENT="${{ inputs.component }}"
 
-        curl -o- https://raw.githubusercontent.com/alvelive/deploy-jitsi/b028bd0cf6da08e27df307a5f0f677ab3c565f15/deploy_jitsi.sh | bash
+        curl -o- https://raw.githubusercontent.com/alvelive/deploy-jitsi/f239dfb0db6ac9a195f389dc7d1d5168f2fc025e/deploy_jitsi.sh | bash
