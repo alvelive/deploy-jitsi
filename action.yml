@@ -60,7 +60,7 @@ runs:
       shell: bash
       run: |
         export KUBECONFIG="${{ inputs.kube-config-file }}"
-        POD_NAMES=$(kubectl get pods --no-headers=true | grep ${{ inputs.component }} | awk '{print $1}')
+        POD_NAMES=$(kubectl get pods --no-headers=true | grep "jitsi.*-${{ inputs.component }}-" | awk '{print $1}')
         if [ -n "$POD_NAMES" ]; then
           echo "$POD_NAMES" | xargs -P 16 -n 1 kubectl delete pod
         else
