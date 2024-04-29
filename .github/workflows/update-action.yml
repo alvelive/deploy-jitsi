@@ -4,6 +4,9 @@ on:
   push:
     paths:
       - action.yml
+      - action-template.yml
+      - deploy_jitsi.sh
+      - .github/workflows/update-action.yml
 
 permissions:
   contents: write
