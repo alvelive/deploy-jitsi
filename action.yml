@@ -60,4 +60,4 @@ runs:
       shell: bash
       run: |
         export KUBECONFIG="${{ inputs.kube-config-file }}"
-        kubectl get pods -n default | grep jibri | awk '{print $1}' | xargs kubectl delete pod -n default
+        kubectl get pods --no-headers=true | grep ${{ inputs.component }} | awk '{print $1}' | xargs -P 16 -n 1 kubectl delete pod
