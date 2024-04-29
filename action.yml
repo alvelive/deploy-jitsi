@@ -43,7 +43,7 @@ runs:
         DOCKER_BUILDKIT: '1'
 
       with:
-        context: .
+        context: ./${{ inputs.component }}
         file: ./Dockerfile
         push: true
         tags: ${{ inputs.docker-username }}/${{ inputs.component }}:${{ inputs.tag }}
