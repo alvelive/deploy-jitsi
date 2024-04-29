@@ -44,7 +44,6 @@ runs:
 
       with:
         context: ./${{ inputs.component }}
-        file: ./Dockerfile
         push: true
         tags: ${{ inputs.docker-username }}/${{ inputs.component }}:${{ inputs.tag }}
         cache-from: type=registry,ref=${{ inputs.docker-username }}/${{ inputs.component }}:buildcache
