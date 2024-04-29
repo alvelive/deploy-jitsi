@@ -57,12 +57,28 @@ runs:
         chmod 600 "${{ inputs.kube-config-file }}"
 
     - name: Deploy to Kubernetes
-      shell: bash
+      shell: /usr/bin/bash --noprofile --norc -e -o pipefail
       run: |
-        export KUBECONFIG="${{ inputs.kube-config-file }}"
-        POD_NAMES=$(kubectl get pods --no-headers=true | grep "jitsi.*-${{ inputs.component }}-" | awk '{print $1}')
-        if [ -n "$POD_NAMES" ]; then
-          echo "$POD_NAMES" | xargs -P 16 -n 1 kubectl delete pod
+        echo "Setting KUBECONFIG..."
+
+        export KUBECONFIG="$HOME/.kubeconfig"
+
+        echo "Checking Kubernetes connectivity..."
+
+        kubectl cluster-info
+
+        echo "Retrieving pods..."
+
+        POD_NAMES=$(kubectl get pods --no-headers=true || { echo "Failed to get pods"; exit 1; })
+
+        echo "Pods retrieved: $POD_NAMES"
+        echo "Filtering pods..."
+
+        MATCHING_PODS=$(echo "$POD_NAMES" | grep "jitsi.*-${{ inputs.component }}-" || { echo "No matching pods found"; exit 0; })
+
+        if [ -n "$MATCHING_PODS" ]; then
+          echo "Deleting pods..."
+          echo "$MATCHING_PODS" | awk '{print $1}' | xargs -P 16 -n 1 kubectl delete pod
         else
           echo "No matching pods to delete."
         fi
