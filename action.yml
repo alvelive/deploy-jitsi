@@ -57,7 +57,7 @@ runs:
         chmod 600 "${{ inputs.kube-config-file }}"
 
     - name: Deploy to Kubernetes
-      shell: /usr/bin/bash --noprofile --norc -e -o pipefail
+      shell: bash
       run: |
         echo "Setting KUBECONFIG..."
 
