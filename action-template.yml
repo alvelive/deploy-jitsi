@@ -47,7 +47,7 @@ runs:
       env:
         DOCKER_BUILDKIT: '1'
       with:
-        context: ${{ inputs.context || ('./' + inputs.component) }}
+        context: ${{ inputs.context || format('{0}{1}', './', inputs.component) }}
         push: true
         tags: ${{ inputs.docker-username }}/${{ inputs.component }}:${{ inputs.tag }}
         cache-from: type=registry,ref=${{ inputs.docker-username }}/${{ inputs.component }}:buildcache
