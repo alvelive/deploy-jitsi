@@ -14,6 +14,11 @@ inputs:
     description: 'Docker image tag'
     required: true
     default: 'latest'
+
+  context:
+    description: 'Docker build context'
+    required: false
+    default: './${{ inputs.component }}'
   kube-config:
     description: 'Kube config yaml file'
     required: true
@@ -41,9 +46,8 @@ runs:
       uses: docker/build-push-action@v5
       env:
         DOCKER_BUILDKIT: '1'
-
       with:
-        context: ./${{ inputs.component }}
+        context: ${{ inputs.context || ('./' + inputs.component) }}
         push: true
         tags: ${{ inputs.docker-username }}/${{ inputs.component }}:${{ inputs.tag }}
         cache-from: type=registry,ref=${{ inputs.docker-username }}/${{ inputs.component }}:buildcache
@@ -62,4 +66,4 @@ runs:
         export KUBECONFIG="${{ inputs.kube-config-file }}"
         export JITSI_COMPONENT="${{ inputs.component }}"
 
-        curl -o- https://raw.githubusercontent.com/alvelive/deploy-jitsi/f239dfb0db6ac9a195f389dc7d1d5168f2fc025e/deploy_jitsi.sh | bash
+        curl -o- https://raw.githubusercontent.com/alvelive/deploy-jitsi/ffc0af269f92accf216460b9623f0cff92a9ba1e/deploy_jitsi.sh | bash
