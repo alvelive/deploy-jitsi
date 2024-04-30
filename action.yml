@@ -47,7 +47,7 @@ runs:
       env:
         DOCKER_BUILDKIT: '1'
       with:
-        context: ${{ inputs.context || ('./' + inputs.component) }}
+        context: ${{ inputs.context || format('{0}{1}', './', inputs.component) }}
         push: true
         tags: ${{ inputs.docker-username }}/${{ inputs.component }}:${{ inputs.tag }}
         cache-from: type=registry,ref=${{ inputs.docker-username }}/${{ inputs.component }}:buildcache
@@ -66,4 +66,4 @@ runs:
         export KUBECONFIG="${{ inputs.kube-config-file }}"
         export JITSI_COMPONENT="${{ inputs.component }}"
 
-        curl -o- https://raw.githubusercontent.com/alvelive/deploy-jitsi/293cfe787f8d4cfc659f21672e1dfb157aadb8f2/deploy_jitsi.sh | bash
+        curl -o- https://raw.githubusercontent.com/alvelive/deploy-jitsi/bd26db8217623713f4de36859ebb9e37f65ab483/deploy_jitsi.sh | bash
