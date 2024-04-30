@@ -97,6 +97,12 @@ The following inputs are required for the GitHub Action to execute properly:
 - **Required**: Yes
 - **Default**: `latest`
 
+### `context`
+
+- **Description**: The context for the Docker Build. (e.g. Dockerfile path)
+- **Required**: No
+- **Default**: `'./' + ${{ inputs.component }}`
+
 ### `kube-config`
 
 - **Description**: The Kubernetes configuration file in YAML format. This file
@@ -107,7 +113,7 @@ The following inputs are required for the GitHub Action to execute properly:
 
 - **Description**: The filepath where the Kubernetes configuration file should
   be stored on the system running the action.
-- **Required**: Yes
+- **Required**: No
 - **Default**: `$HOME/.kubeconfig`
 
 ### Expected Outputs
