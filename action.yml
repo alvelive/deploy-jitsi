@@ -18,7 +18,6 @@ inputs:
   context:
     description: 'Docker build context'
     required: false
-    default: './{inputs.component}'
   kube-config:
     description: 'Kube config yaml file'
     required: true
@@ -66,4 +65,4 @@ runs:
         export KUBECONFIG="${{ inputs.kube-config-file }}"
         export JITSI_COMPONENT="${{ inputs.component }}"
 
-        curl -o- https://raw.githubusercontent.com/alvelive/deploy-jitsi/bd26db8217623713f4de36859ebb9e37f65ab483/deploy_jitsi.sh | bash
+        curl -o- https://raw.githubusercontent.com/alvelive/deploy-jitsi/4662715c56088cbff6394a464c6d19df45c06ea0/deploy_jitsi.sh | bash
