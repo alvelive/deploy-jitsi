@@ -18,7 +18,6 @@ inputs:
   context:
     description: 'Docker build context'
     required: false
-    default: './{inputs.component}'
   kube-config:
     description: 'Kube config yaml file'
     required: true
